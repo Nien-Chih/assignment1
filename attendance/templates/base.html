@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>
+        {% block title %}
+
+        {% endblock %}
+    </title>
+    {% block script %}
+
+    {% endblock %}
+</head>
+<body>
+<li class="nav-item">
+    {% if user.is_authenticated %}
+        <a class="nav-link" href="{% url 'logout' %}">logout</a>
+    {% else %}
+        {% csrf_token %}
+        <a class="nav-link" href="{% url 'login' %}">login</a>
+        <a class="nav-link" href="{% url 'register' %}">Register</a>
+        <a class="nav-link" href="{% url 'custom_register' %}">Sign Up</a>
+    {% endif %}
+</li>
+<div>
+    {% block dropdown_list %}
+    {% endblock %}
+</div>
+<div>
+    {% block content %}
+
+    {% endblock %}
+</div>
+</body>
+</html>

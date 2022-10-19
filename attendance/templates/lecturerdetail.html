@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block title %}
+    {{ staff_id }}
+{% endblock %}
+
+{% block content %}
+    <h1>Lecturer: {{ lecturer.user.first_name }} {{ lecturer.user.last_name }} </h1>
+    <h1>Staff Id: {{ lecturer.staff_id }}</h1>
+    <form action="{% url 'update-lecturer' %}" method="post">
+        {% csrf_token %}
+        <input type="hidden" name="staff_id" value="{{ lecturer.staff_id }}">
+        <input type="text" placeholder="lecturer first name" name="lecturer_fname"
+               value="{{ lecturer.user.first_name }}">
+        <input type="text" placeholder="lecturer last name" name="lecturer_lname" value="{{ lecturer.user.last_name }}">
+        <input type="date" name="lecturer_DOB" value="{{ lecturer.DOB }}">
+        <button>Change</button>
+    </form>
+    <div>
+        <form method="get" action="{% url "get-lecturer" %}" enctype="multipart/form-data">
+            <button>Back</button>
+        </form>
+    </div>
+{% endblock %}

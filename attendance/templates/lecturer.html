@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block title %}
+    lecturer
+{% endblock %}
+
+{% block content %}
+    {{ content }}
+    <h1>Lecturer</h1>
+    {% for lecturer in lecturer_all %}
+            <div>
+                <a href="{% url 'lecturer-detail' staff_id=lecturer.staff_id %}">{{ lecturer.user.first_name }} {{ lecturer.user.last_name }}</a>
+                <a href="{% url 'delete-lecturer' staff_id=lecturer.staff_id  %}">Delete</a>
+            </div>
+    {% endfor %}
+
+    <form action="{% url 'create-lecturer' %}" method="post">
+        {% csrf_token %}
+        <input type="text" placeholder="lecturer fname" name="lecturer_fname">
+        <input type="text" placeholder="lecturer lname" name="lecturer_lname">
+        <input type="date" placeholder="lecturer DOB" name="lecturer_DOB">
+        <input type="email" placeholder="lecturer email" name="lecturer_email">
+        <button>Add</button>
+    </form>
+    <div>
+        <form method="get" action="{% url "index" %}" enctype="multipart/form-data">
+            <button>Back To Home</button>
+        </form>
+    </div>
+{% endblock %}

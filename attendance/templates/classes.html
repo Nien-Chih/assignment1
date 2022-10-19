@@ -1,0 +1,99 @@
+{% extends "base.html" %}
+
+{% block title %}
+    classes
+{% endblock %}
+
+{% block script %}
+    {% load static %}
+    <script type="text/javascript" src="{% static 'jquery-3.6.1.js' %}"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#courseSelector").change(function () {
+                let selectedCourse = $("#courseSelector option:selected").val();
+                console.log("ok");
+                $.ajax({
+                    url: "/semester/course_id/" + selectedCourse,
+                    type: "GET",
+                    dataType: "json",
+                    success: function (resp) {
+                        let semesterSelector = $("#semesterSelector")
+                        semesterSelector.empty()
+                        semesterSelector.append($('<option>', {
+                            text: "select semester"
+                        }))
+                        for (let i = 0; i < resp.length; i++) {
+                            semesterSelector.append($('<option>', {value: resp[i], text: resp[i]}));
+                        }
+                    },
+                    error: function () {
+                        console.log("something went wrong");
+                    },
+                });
+            });
+        });
+    </script>
+{% endblock %}
+
+{% block content %}
+    {{ content }}
+    <h1>Classes</h1>
+    <table>
+        {% for classes in classes_all %}
+            <tr>
+                <td>
+                    <a href="{% url 'classes-detail' classes_id=classes.id %}">{{ classes.number }}</a>
+                </td>
+                <td>
+                    <h6>{{ classes.course.name }}</h6>
+                </td>
+                <td>
+                    <a href="{% url 'delete-classes' classes_id=classes.id %}">Delete</a>
+                </td>
+            </tr>
+        {% endfor %}
+    </table>
+
+    <form action="{% url 'create-classes' %}" method="post">
+        {% csrf_token %}
+        <input type="number" placeholder="classes number" name="class_number">
+        <select id="courseSelector" name="class_course_id">
+            <option>select course</option>
+            {% for course in course_all %}
+                <option value={{ course.id }}>{{ course.name }}</option>>
+            {% endfor %}
+        </select>
+        <select id="semesterSelector" name="class_semester_id">
+            <option>select semester</option>
+        </select>
+        <select id="lecturerSelector" name="class_lecturer_staff_id">
+            <option>select lecturer</option>
+            {% for lecturer in lecturer_all %}
+                <option value={{ lecturer.staff_id }}>{{ lecturer.user.first_name }} {{ lecturer.user.last_name }}</option>
+                >
+            {% endfor %}
+        </select>
+        <button>Add</button>
+        <h1 id="titleSelectStudent">Select Students to attend this class</h1>
+        {% for student in student_all %}
+            <div>
+                <table>
+                    <tr>
+                        <td>
+                            {{ student.user.first_name }} {{ student.user.last_name }}
+                        </td>
+                        <td>
+                            <input type="checkbox" name="AttendStudents" id="option{{ student.student_id }}"
+                                   value={{ student.student_id }}>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        {% endfor %}
+    </form>
+    <div>
+        <form method="get" action="{% url "index" %}" enctype="multipart/form-data">
+            <button>Back To Home</button>
+        </form>
+    </div>
+{% endblock %}

@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+{% block title %}
+    semester
+{% endblock %}
+
+{#{% block dropdown_list %}#}
+{#    <select>#}
+{#        <option>select semester</option>#}
+{#        {% for object in semester_all %}#}
+{#            <option>{{ object.semester }}</option>>#}
+{#        {% endfor %}#}
+{#    </select>#}
+{#{% endblock %}#}
+
+{% block content %}
+    {{ content }}
+    <h1>Semester</h1>
+    <table style="border: solid" rules="all">
+    <tr>
+        <td>
+            <h2>course name</h2>
+        </td>
+        <td>
+            <h2>semester</h2>
+        </td>
+        <td>
+        </td>
+    </tr>
+    {% for semester in semester_all %}
+        {% for course in semester.course.all %}
+                <tr>
+                    <td>
+                        <a href="{% url 'course-detail' course_id=course.id %}">{{ course.name }}</a>
+                    </td>
+                    <td>
+                        <a href="{% url 'semester-detail' semester_id=semester.id %}">{{ semester.semester }}</a>
+                    </td>
+                    <td>
+                        <a href="{% url 'delete-semester' semester_id=semester.id %}">Delete</a>
+                    </td>
+                </tr>
+
+        {% endfor %}
+    {% endfor %}
+    </table>
+    <form action="{% url 'create-semester' %}" method="post">
+        {% csrf_token %}
+        <select id="selector" name="semester_course">
+            <option>select course</option>
+            {% for course in course_all %}
+                <option value={{ course.id }}>{{ course.name }}</option>>
+            {% endfor %}
+        </select>
+        <input type="text" placeholder="Semester year" name="semester_year">
+        <input type="text" placeholder="semester" name="semester_semester">
+        <button>Add</button>
+    </form>
+    <div>
+        <form method="get" action="{% url "index" %}" enctype="multipart/form-data">
+            <button>Back To Home</button>
+        </form>
+    </div>
+{% endblock %}

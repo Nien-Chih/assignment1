@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block title %}
+    student classes
+{% endblock %}
+
+{% block content %}
+    {{ content }}
+    {% for class in classes_all %}
+        <a href="{% url 'student-classes-detail' class_id=class.id %}">{{ class.number }}</a>
+    {% endfor %}
+    <form action="{% url 'add-student-class' %}" method="post">
+        {% csrf_token %}
+
+        <input type="text" placeholder="class number" name="class_number">
+        <input type="text" placeholder="course code" name="course_id">
+        <input type="number" placeholder="hours per day" name="course_hours_per_day">
+        <input type="number" placeholder="total hours" name="course_total_hours">
+        <button>Add</button>
+    </form>
+{% endblock %}

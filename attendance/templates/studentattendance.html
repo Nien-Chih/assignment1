@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% block title %}
+    Student Attendance
+{% endblock %}
+{% block content %}
+    <table style="border: solid" rules="all">
+        <tr>
+            <td>
+                <h3 style="font-weight: bold">Course Name</h3>
+            </td>
+            <td>
+                <h3 style="font-weight: bold">Absent Hours</h3>
+            </td>
+            <td>
+                <h3 style="font-weight: bold">Attendance</h3>
+            </td>
+        </tr>
+        {% for classes in classes_all %}
+            <tr>
+                <td>
+                    <h3 style="color: blue"> {{ classes.course.name }}</h3>
+                </td>
+                {% for attendance in attendance_all %}
+                    {% if attendance.course_id == classes.course_id %}
+                        <td>
+                            <h3 style="color: blue">{{ attendance.absent_hours }}</h3>
+                        </td>
+                        <td>
+                            <h3 style="color: blue">{% widthratio attendance.attendance_rate 1 100 %} %</h3>
+                        </td>
+                    {% endif %}
+                {% endfor %}
+            </tr>
+        {% endfor %}
+    </table>
+{% endblock %}

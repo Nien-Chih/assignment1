@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block title %}
+{{ student.student_id }}
+{% endblock %}
+
+{% block content %}
+{{ student_id }}
+    <form action="{% url 'update-student' %}" method="post">
+    {% csrf_token %}
+        <input type="hidden" name="student_id" value="{{ student.staff_id }}">
+        <input type="text" placeholder="student first name" name="student_fname" value="{{ student.fname }}">
+        <input type="text" placeholder="student last name" name="student_lname" value="{{ student.lname }}">
+        <input type="date" name="student_DOB" value="{{ student.DOB }}">
+        <button>Change</button>
+    </form>
+     <div>
+        <form method="get" action="{% url "get-student" %}" enctype="multipart/form-data">
+            <button>Back</button>
+        </form>
+    </div>
+{% endblock %}

@@ -1,0 +1,112 @@
+{% extends "base.html" %}
+{% block title %}
+    {{ classes.id }}
+{% endblock %}
+
+{% block script %}
+    <script src="https://code.jquery.com/jquery-3.6.0.js"
+            integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#courseSelector").change(function () {
+                let selectedCourse = $("#courseSelector option:selected").val();
+                $.ajax({
+                    url: "/semester/course_id/" + selectedCourse,
+                    type: "GET",
+                    dataType: "json",
+                    success: function (resp) {
+                        let semesterSelector = $("#semesterSelector")
+                        semesterSelector.empty()
+                        semesterSelector.append($('<option>', {
+                            text: "select semester"
+                        }))
+                        for (let i = 0; i < resp.length; i++) {
+                            semesterSelector.append($('<option>', {value: resp[i], text: resp[i]}));
+                        }
+                    },
+                    error: function () {
+                        console.log("something went wrong");
+                    },
+                });
+            });
+        });
+    </script>
+{% endblock %}
+
+{% block content %}
+    <h1>Course: {{ classes.course.name }}</h1>
+    <form action="{% url 'update-classes' %}" method="post">
+        {% csrf_token %}
+        <input type="hidden" name="classes_id" value="{{ classes.id }}">
+        <input type="number" name="class_number" value="{{ classes.number }}">
+        <select id="courseSelector" name="class_course_id">
+            <option>select course</option>
+            {% for course in course_all %}
+                {% if course.id == classes.course.id %}
+                    <option value={{ course.id }} selected>{{ course.name }}</option>>
+                {% else %}
+                    <option value={{ course.id }}>{{ course.name }}</option>>
+                {% endif %}
+            {% endfor %}
+        </select>
+        <select id="semesterSelector" name="class_semester_id">
+            <option>select semester</option>
+            {% for semester in classes.course.semester_course.all %}
+                {% if semester.id == classes.semester.id %}
+                    <option value={{ semester.id }} selected>{{ semester.semester }}</option>>
+                {% else %}
+                    <option value={{ semester.id }}>{{ semester.semester }}</option>>
+                {% endif %}
+            {% endfor %}
+        </select>
+        <select id="lecturerSelector" name="class_lecturer_staff_id">
+            <option>select lecturer</option>
+            {% for lecturer in lecturer_all %}
+                {% if lecturer.staff_id == classes.lecturer.staff_id %}
+                    <option value={{ lecturer.staff_id }} selected>{{ lecturer.user.first_name }} {{ lecturer.user.last_name }}</option>
+                    >
+                {% else %}
+                    <option value={{ lecturer.staff_id }}>{{ lecturer.user.first_name }} {{ lecturer.user.last_name }}</option>
+                    >
+                {% endif %}
+            {% endfor %}
+        </select>
+        <button>Change</button>
+        <h1 id="titleSelectStudent">Students in this class</h1>
+        {% for student in classes.student.all %}
+            <div>
+                <table>
+                    <tr>
+                        <td>
+                            {{ student.user.first_name }} {{ student.user.last_name }}
+                        </td>
+                        <td>
+                            <a href="{% url 'delete-student-class' class_id=classes.id student_id=student.student_id %}">Delete</a>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        {% endfor %}
+        {% for student in student_all %}
+            {% if student not in classes.student.all %}
+                <div>
+                    <table>
+                        <tr>
+                            <td>
+                                {{ student.user.first_name }} {{ student.user.last_name }}
+                            </td>
+                            <td>
+                                <a href="{% url 'add-student-class' class_id=classes.id student_id=student.student_id %}">Add</a>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            {% endif %}
+        {% endfor %}
+    </form>
+    <div>
+        <form method="get" action="{% url "get-classes" %}" enctype="multipart/form-data">
+            <button>Back</button>
+        </form>
+    </div>
+{% endblock %}

@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% block title %}
+    course
+{% endblock %}
+
+{% block content %}
+    {{ content }}
+    <h1>Course</h1>
+    <table style="border: solid" rules="all">
+        <tr>
+            <td>
+                <h2>Course Name</h2>
+            </td>
+            <td>
+                <h2>Course Code</h2>
+            </td>
+            <td>
+            </td>
+        </tr>
+        {% for course in course_all %}
+            <tr>
+                <td>
+                    <a href="{% url 'course-detail' course_id=course.id %}">{{ course.name }}</a>
+                </td>
+                <td>
+                    <h4>{{ course.code }}</h4>
+                </td>
+                <td>
+                    <a href="{% url 'delete-course' course_id=course.id %}">Delete</a>
+                </td>
+            </tr>
+        {% endfor %}
+    </table>
+    <form action="{% url 'create-course' %}" method="post">
+        {% csrf_token %}
+        <input type="text" placeholder="course name" name="course_name">
+        <input type="text" placeholder="course code" name="course_code">
+        <input type="number" placeholder="hours per day" name="course_hours_per_day">
+        <input type="number" placeholder="total hours" name="course_total_hours">
+        <button>Add</button>
+    </form>
+
+    <div>
+        <form method="get" action="{% url "index" %}" enctype="multipart/form-data">
+            <button>Back To Home</button>
+        </form>
+    </div>
+{% endblock %}

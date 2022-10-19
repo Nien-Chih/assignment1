@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block title %}
+    Students in this class
+{% endblock %}
+
+{% block content %}
+    {{ content }}
+    {% for student in class.student.all %}
+        <div>
+            <a href="{% url 'student-detail' student_id=student.student_id %}">{{ student.user.first_name }} {{ student.user.last_name }}</a>
+            <a href="{% url 'delete-student-class' class_id=class.id student_id=student.student_id %}">Delete</a>
+        </div>
+    {% endfor %}
+{% endblock %}
