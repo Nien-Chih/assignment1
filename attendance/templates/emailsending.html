@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1>{{ message }}</h1>>
+    <div>
+        <form method="get" action="{% url "attendance-detail" class_id=class_id %}" enctype="multipart/form-data">
+            <button>Back To Attendance</button>
+        </form>
+    </div>
+{% endblock %}

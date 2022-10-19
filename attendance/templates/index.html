@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block title %}
+    Home
+{% endblock %}
+{% block content %}
+    {% if user.is_authenticated %}
+        {% if user.is_superuser %}
+            <div>
+                <a href="{% url 'get-student' %}">Student</a>
+            </div>
+            <div>
+                <a href="{% url 'get-course' %}">Course</a>
+            </div>
+            <div>
+                <a href="{% url 'get-semester' %}">Semester</a>
+            </div>
+            <div>
+                <a href="{% url 'get-lecturer' %}">Lecturer</a>
+            </div>
+            <div>
+                <a href="{% url 'get-classes' %}">Class</a>
+            </div>
+            <div>
+                <a href="{% url 'get-attendance-course' %}">Attendance</a>
+            </div>
+        {% else %}
+            {% for group in user.groups.all %}
+                {% if group.name == "Student" %}
+                    <a href="{% url 'check-my-attendance' id=user.id %}">Check My Attendance</a>
+                {% endif %}
+                {% if group.name == "Lecturer" %}
+                    <a href="{% url 'lecturer-attendance' staff_id=user.id %}">Check My Attendance</a>
+                {% endif %}
+            {% endfor %}
+        {% endif %}
+    {% else %}
+        <h1>Welcome to use attendance system, please register or login first.</h1>
+    {% endif %}
+{% endblock %}

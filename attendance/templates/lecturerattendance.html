@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block title %}
+    Student Attendance
+{% endblock %}
+{% block content %}
+    {% for class in class_all %}
+        <div>
+            <a href="{% url 'attendance-detail' class_id=class.id %}">{{ class.course.name }}</a>
+        </div>
+    {% endfor %}
+{% endblock %}

@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block title %}
+    Attendance
+{% endblock %}
+{% block content %}
+    <h1>Attendance</h1>
+    <div>
+        <h2>Click on course name to see attendance</h2>
+    </div>
+    {% for class in class_all %}
+        <div>
+            <a href="{% url 'attendance-detail' class_id=class.id %}">{{ class.course.name }}</a>
+        </div>
+    {% endfor %}
+    <div>
+        <form method="get" action="{% url "index" %}" enctype="multipart/form-data">
+            <button>Back To Home</button>
+        </form>
+    </div>
+{% endblock %}
