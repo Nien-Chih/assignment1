@@ -10,7 +10,10 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.1/ref/settings/
 """
 import os
+from os.path import normpath, join
 from pathlib import Path
+
+from django.contrib import staticfiles
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -105,16 +108,20 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 
+BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 STATIC_URL = "static/"
-
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+STATICFILES_DIRS = (
+    os.path.join(BASE_DIR, "attendance/static"),
+)
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
-SENDGRID_API_KEY = os.getenv('Ui5PqrosQ629MZ5Ee7NkHw')
+SENDGRID_API_KEY = os.getenv('')
 
 EMAIL_HOST = 'smtp.sendgrid.net'
 EMAIL_HOST_USER = 'apikey'  # this is exactly the value 'apikey'
-EMAIL_HOST_PASSWORD = "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"
+EMAIL_HOST_PASSWORD = ""
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 

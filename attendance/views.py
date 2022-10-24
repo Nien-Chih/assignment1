@@ -103,7 +103,8 @@ def createCourse(request):
     course_code = request.POST.get("course_code")
     course_hours_per_day = request.POST.get("course_hours_per_day")
     course_total_hours = request.POST.get("course_total_hours")
-    course = Course(name=course_name, code=course_code, hours_per_day=course_hours_per_day,
+    course_all = Course.objects.all()
+    course = Course.objects.create(id=len(course_all)+1, name=course_name, code=course_code, hours_per_day=course_hours_per_day,
                     totalhours=course_total_hours)
     course.save()
     return HttpResponseRedirect(reverse('get-course'))
@@ -170,7 +171,8 @@ def createClasses(request):
             classes.student.add(student)
     classes.save()
     for student in classes.student.all():
-        Attendance.objects.create(student=student, course=course, classes=classes, absent_hours=0, attendance_rate=1.0)
+        attendance_all = Attendance.objects.all()
+        Attendance.objects.create(id=len(attendance_all)+1, student=student, course=course, classes=classes, absent_hours=0, attendance_rate=1.0)
     return HttpResponseRedirect(reverse('get-classes'))
 
 
